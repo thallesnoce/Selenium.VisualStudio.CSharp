@@ -1,33 +1,36 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.IE;
+﻿
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
+using System.Collections.Generic;
 
 namespace Selenium.VisualStudio
 {
-    [TestClass]
+
+    [TestFixture]
+    //[Parallelizable]
     public class GlassLewis : TestBase
     {
-        [TestMethod]
-        public void Login_Sucess_FireFox()
+        [Test]
+        [TestCaseSource(typeof(TestBase), "SelectedBrowser")]
+        public void Login_Sucess(string browser)
         {
-            using (var driver = new FirefoxDriver())
-            {
-                driver.Manage().Window.Maximize();
-                driver.Navigate().GoToUrl("https://viewpoint.glasslewis.com/");
-                var userName = driver.FindElementById("lbl-username");
-                userName.SendKeys("tnoce@glasslewis.com");
+            Setup(browser);
 
-                var password = driver.FindElementById("lbl-password");
-                password.SendKeys("Thalles6632");
+            broswerDriver.Driver().Navigate().GoToUrl("https://www.google.ie/");
 
-                var searchButton = driver.FindElementById("btn-submit-login");
+            Actions actions = new Actions(broswerDriver.Driver());
+            var element = broswerDriver.Driver().FindElement(By.Id("lst-ib"));
+            actions.MoveToElement(element);
+            actions.Click();
+            actions.SendKeys("Glass Lewis");
+            actions.Build().Perform();
 
-                searchButton.Submit();
-
-                //var searchResults = driver.FindElementById("resultStats");
-            }
+            Actions actions3 = new Actions(broswerDriver.Driver());
+            var element3 = broswerDriver.Driver().FindElement(By.Name("btnK"));
+            actions3.MoveToElement(element3);
+            actions3.Click();
+            actions3.Build().Perform();
         }
     }
 }
